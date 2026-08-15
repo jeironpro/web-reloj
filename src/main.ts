@@ -3,12 +3,13 @@ import { initNav } from "./nav";
 import { initClock } from "./views/clockView";
 import { initTimer } from "./views/timerView";
 import { initStopwatch } from "./views/stopwatchView";
+import { byId } from "./utils/dom";
 import { VIEW_IDS, type ViewId } from "./types";
 
 const views: Record<ViewId, HTMLElement> = {
-    reloj: document.getElementById("view-reloj") as HTMLElement,
-    temporizador: document.getElementById("view-temporizador") as HTMLElement,
-    cronometro: document.getElementById("view-cronometro") as HTMLElement,
+    reloj: byId<HTMLElement>("view-reloj"),
+    temporizador: byId<HTMLElement>("view-temporizador"),
+    cronometro: byId<HTMLElement>("view-cronometro"),
 };
 
 function resolveView(): ViewId {
@@ -17,7 +18,7 @@ function resolveView(): ViewId {
     return "reloj";
 }
 
-const clock = initClock(document.getElementById("clockMount") as HTMLElement);
+const clock = initClock(byId<HTMLElement>("clockMount"));
 const timer = initTimer();
 const stopwatch = initStopwatch();
 
