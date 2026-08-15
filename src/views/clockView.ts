@@ -1,7 +1,16 @@
+/*
+ * clockView.ts — Reloj analógico clásico renderizado en 3D con Three.js.
+ *
+ * Construye la escena (caja, esfera con números romanos, bisel y tres
+ * manecillas) y anima las manecillas con la hora real. El bucle de render
+ * solo corre mientras la vista Reloj está activa (start/stop).
+ */
+
 import * as THREE from "three";
 
 import { pad2 } from "../utils/format";
 
+/** Control del ciclo de vida del reloj (arrancar/parar el bucle de render). */
 export interface ClockController {
     start(): void;
     stop(): void;
@@ -14,6 +23,11 @@ const BRASS = 0xc19a52;
 const BRASS_DARK = 0x8a6a2f;
 const INK = 0x2a241c;
 
+/**
+ * Dibuja la esfera (fondo marfil, 60 marcas y números romanos) en un canvas
+ * y la devuelve como textura. Primero usa una serif del sistema y, cuando
+ * Fraunces termina de cargar, redibuja con la fuente definitiva.
+ */
 function makeDialTexture(): THREE.CanvasTexture {
     const canvas = document.createElement("canvas");
     canvas.width = 1024;
@@ -73,6 +87,10 @@ function makeDialTexture(): THREE.CanvasTexture {
     return texture;
 }
 
+/**
+ * Crea una manecilla ahusada (más ancha en la base y con punta) extrudida en
+ * Z. La geometría pivota en el origen para poder girarla con `rotation.z`.
+ */
 function makeTaperedHand(width: number, length: number, color: number): THREE.Mesh {
     const shape = new THREE.Shape();
     shape.moveTo(-width / 2, 0);
@@ -101,6 +119,10 @@ function makeTaperedHand(width: number, length: number, color: number): THREE.Me
     return new THREE.Mesh(geometry, material);
 }
 
+/**
+ * Crea el segundero: una varilla fina con un contrapeso circular en la base.
+ * Ambos forman un grupo que pivota sobre el origen.
+ */
 function makeSecondHand(width: number, length: number, color: number): THREE.Group {
     const group = new THREE.Group();
     const material = new THREE.MeshStandardMaterial({ color, roughness: 0.3, metalness: 0.8 });
@@ -120,6 +142,14 @@ function makeSecondHand(width: number, length: number, color: number): THREE.Gro
     return group;
 }
 
+/**
+ * Monta el reloj en el contenedor indicado y devuelve su controlador.
+ *
+ * - Render con fondo transparente para que se vea el papel de la página.
+ * - Redimensionado responsive y paralaje suave con el puntero (desactivados
+ *   parcialmente con `prefers-reduced-motion`).
+ * - Actualiza la lectura digital (hora) una vez por segundo.
+ */
 export function initClock(mount: HTMLElement): ClockController {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -247,6 +277,8 @@ export function initClock(mount: HTMLElement): ClockController {
         const minutes = now.getMinutes() + seconds / 60;
         const hours = (now.getHours() % 12) + minutes / 60;
 
+        // Rotación negativa: en el espacio de Three.js el sentido horario
+        // (el de un reloj) equivale a ángulos decrecientes alrededor de Z.
         hourHand.rotation.z = -(hours / 12) * TAU;
         minuteHand.rotation.z = -(minutes / 60) * TAU;
         secondHand.rotation.z = -(seconds / 60) * TAU;
