@@ -2,6 +2,7 @@ import "./style.css";
 import { initNav } from "./nav";
 import { initClock } from "./views/clockView";
 import { initTimer } from "./views/timerView";
+import { initStopwatch } from "./views/stopwatchView";
 import { VIEW_IDS, type ViewId } from "./types";
 
 const TITLES: Record<ViewId, string> = {
@@ -24,6 +25,7 @@ function resolveView(): ViewId {
 
 const clock = initClock(document.getElementById("clockMount") as HTMLElement);
 const timer = initTimer();
+const stopwatch = initStopwatch();
 
 function showView(id: ViewId): void {
   for (const key of VIEW_IDS) {
@@ -37,6 +39,7 @@ function showView(id: ViewId): void {
   }
 
   timer.setVisible(id === "temporizador");
+  stopwatch.setVisible(id === "cronometro");
 
   document.querySelectorAll<HTMLAnchorElement>("a.nav__link[data-view]").forEach((link) => {
     const active = link.dataset.view === id;
