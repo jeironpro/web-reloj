@@ -18,6 +18,7 @@ Este proyecto forma parte de mi portafolio personal. El objetivo es demostrar bu
 - [Vite](https://vitejs.dev/) + [TypeScript](https://www.typescriptlang.org/)
 - [Three.js](https://threejs.org/)
 - Google Fonts (Fraunces, Inter, JetBrains Mono)
+- [ESLint](https://eslint.org/) + [Prettier](https://prettier.io/) para calidad y formato
 - GitHub Actions para CI
 
 ## Puesta en marcha
@@ -28,6 +29,12 @@ yarn install
 
 # Desarrollo
 yarn dev
+
+# Lint (calidad, imports y tipos)
+yarn lint
+
+# Formatear el código con Prettier
+yarn format
 
 # Typecheck + build de producción
 yarn build
@@ -41,6 +48,7 @@ yarn preview
 ```
 ├── index.html            # Shell de la aplicación
 ├── tokens.css            # Sistema de diseño (colores, tipografía, espaciado, movimiento)
+├── eslint.config.js      # Reglas de ESLint (flat config)
 ├── src/
 │   ├── main.ts           # Punto de entrada y routing entre vistas
 │   ├── nav.ts            # Navbar flotante + menú hamburguesa
