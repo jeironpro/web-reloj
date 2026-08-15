@@ -1,9 +1,19 @@
+/*
+ * timerView.ts — Temporizador (cuenta regresiva).
+ *
+ * Máquina de estados: reposo → en marcha → pausa → terminado. El tiempo se
+ * calcula contra `Date.now()` (no por acumulación de ticks) para no derivar.
+ * Al agotarse emite un doble tono y pulsa el anillo.
+ */
+
 import { byId } from "../utils/dom";
 import { clampInt, formatTimer } from "../utils/format";
 import type { ViewController } from "../types";
 
+// Circunferencia del círculo del SVG (r=92): 2π·92.
 const CIRCUMFERENCE = 2 * Math.PI * 92;
 
+/** Inicializa el temporizador y devuelve su controlador de visibilidad. */
 export function initTimer(): ViewController {
     const hInput = byId<HTMLInputElement>("timerH");
     const mInput = byId<HTMLInputElement>("timerM");
@@ -16,13 +26,15 @@ export function initTimer(): ViewController {
     const statusEl = byId<HTMLElement>("timerStatus");
     const presets = Array.from(document.querySelectorAll<HTMLButtonElement>("#timerPresets .chip"));
 
-    let totalMs = 5 * 60 * 1000;
+    // Estado de la cuenta regresiva. `endAt` es el instante absoluto en que
+    // termina mientras está en marcha; al pausar se congela en `remainingMs`.
+    let totalMs = 5 * 60 * 1000; // Duración total de la ronda actual.
     let remainingMs = totalMs;
     let endAt = 0;
     let running = false;
     let finished = false;
     let intervalId: number | undefined;
-    let audio: AudioContext | null = null;
+    let audio: AudioContext | null = null; // Se crea solo tras un gesto del usuario.
 
     const readTotal = (): number => {
         const h = clampInt(hInput.value, 0, 23);
@@ -62,6 +74,7 @@ export function initTimer(): ViewController {
         }
     };
 
+    // Doble tono (880 Hz y 660 Hz) con envolvente suave, sin nota sostenida.
     const beep = (): void => {
         const ctx = audio;
         if (!ctx || ctx.state !== "running") return;
@@ -82,6 +95,7 @@ export function initTimer(): ViewController {
         });
     };
 
+    // Tick del intervalo: recalcula contra el reloj y completa si llegó a cero.
     const step = (): void => {
         const ms = Math.max(0, endAt - Date.now());
         render(ms);

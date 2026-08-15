@@ -1,5 +1,9 @@
 <!doctype html>
 <html lang="es">
+    <!--
+        web-reloj — Reloj clásico en 3D con temporizador y cronómetro.
+        Estructura: navbar flotante + tres vistas intercambiadas por hash.
+    -->
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,8 +22,10 @@
         />
     </head>
     <body>
+        <!-- Enlace de accesibilidad: salta el navbar para ir directo al contenido -->
         <a class="skip-link" href="#main">Saltar al contenido</a>
 
+        <!-- Navbar flotante (píldora) con wordmark, opciones y menú hamburguesa -->
         <header class="nav" id="nav">
             <div class="nav__inner">
                 <a
@@ -90,6 +96,7 @@
         </header>
 
         <main class="stage" id="main">
+            <!-- Vista por defecto: reloj analógico 3D -->
             <!-- Reloj -->
             <section class="view" id="view-reloj" aria-labelledby="reloj-title">
                 <p class="view__eyebrow" id="reloj-title">Hora actual</p>

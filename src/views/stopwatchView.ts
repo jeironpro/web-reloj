@@ -1,7 +1,16 @@
+/*
+ * stopwatchView.ts — Cronómetro con centésimas y vueltas.
+ *
+ * El tiempo transcurrido se calcula contra `performance.now()`: mientras corre
+ * suma el lapso desde `startedAt`, y al pausar acumula lo ya medido. El bucle
+ * de render (rAF) solo avanza cuando la vista está visible y en marcha.
+ */
+
 import { byId } from "../utils/dom";
 import { formatSplit, pad2 } from "../utils/format";
 import type { ViewController } from "../types";
 
+/** Inicializa el cronómetro y devuelve su controlador de visibilidad. */
 export function initStopwatch(): ViewController {
     const display = byId<HTMLElement>("stopwatchDisplay");
     const startBtn = byId<HTMLButtonElement>("stopwatchStart");
@@ -9,6 +18,9 @@ export function initStopwatch(): ViewController {
     const resetBtn = byId<HTMLButtonElement>("stopwatchReset");
     const lapsEl = byId<HTMLOListElement>("stopwatchLaps");
 
+    // `accumulated` guarda lo medido antes de la última pausa; `startedAt`,
+    // el instante en que empezó a correr la última vez. `lastLap` es el
+    // tiempo acumulado en el momento de la vuelta anterior.
     let accumulated = 0;
     let startedAt = 0;
     let running = false;
@@ -23,6 +35,7 @@ export function initStopwatch(): ViewController {
         display.textContent = formatSplit(elapsed());
     };
 
+    // Bucle de render: se detiene solo si no corre o si la vista está oculta.
     const loop = (): void => {
         if (!running || !visible) return;
         raf = requestAnimationFrame(loop);
@@ -69,6 +82,7 @@ export function initStopwatch(): ViewController {
         render();
     };
 
+    // Registra una vuelta: el parcial es el tiempo desde la vuelta anterior.
     const lap = (): void => {
         const now = elapsed();
         const split = now - lastLap;

@@ -1,3 +1,6 @@
+# Workflow de integración continua.
+# En cada PR (y push a main) instala dependencias con Yarn y compila el proyecto
+# (typecheck + build de producción) para validar que todo sigue verde.
 name: CI
 
 on:
