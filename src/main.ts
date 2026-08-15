@@ -1,5 +1,6 @@
 import "./style.css";
 import { initNav } from "./nav";
+import { initClock } from "./views/clockView";
 import { VIEW_IDS, type ViewId } from "./types";
 
 const TITLES: Record<ViewId, string> = {
@@ -20,9 +21,17 @@ function resolveView(): ViewId {
   return "reloj";
 }
 
+const clock = initClock(document.getElementById("clockMount") as HTMLElement);
+
 function showView(id: ViewId): void {
   for (const key of VIEW_IDS) {
     views[key].hidden = key !== id;
+  }
+
+  if (id === "reloj") {
+    clock.start();
+  } else {
+    clock.stop();
   }
 
   document.querySelectorAll<HTMLAnchorElement>("a.nav__link[data-view]").forEach((link) => {
