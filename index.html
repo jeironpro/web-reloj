@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reloj · Hora, temporizador y cronómetro</title>
+    <meta
+      name="description"
+      content="Un reloj clásico renderizado en 3D con Three.js, junto a un temporizador y un cronómetro."
+    />
+    <meta name="theme-color" content="#f6f2e7" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+
+    <header class="nav" id="nav">
+      <div class="nav__inner">
+        <a class="nav__wordmark" href="#reloj" data-view="reloj" aria-label="Reloj — inicio">
+          <svg
+            class="nav__glyph"
+            viewBox="0 0 24 24"
+            width="22"
+            height="22"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6" />
+            <path
+              d="M12 7.2v4.6l3.2 2"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Reloj</span>
+        </a>
+
+        <button
+          class="nav__burger"
+          id="navBurger"
+          type="button"
+          aria-expanded="false"
+          aria-controls="navMenu"
+          aria-label="Abrir menú"
+        >
+          <span class="nav__burger-box" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+
+        <nav class="nav__menu" id="navMenu" aria-label="Principal">
+          <ul class="nav__links">
+            <li><a class="nav__link" href="#reloj" data-view="reloj">Reloj</a></li>
+            <li><a class="nav__link" href="#temporizador" data-view="temporizador">Temporizador</a></li>
+            <li><a class="nav__link" href="#cronometro" data-view="cronometro">Cronómetro</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="stage" id="main">
+      <!-- Reloj -->
+      <section class="view" id="view-reloj" aria-labelledby="reloj-title">
+        <p class="view__eyebrow" id="reloj-title">Hora actual</p>
+        <div class="clock">
+          <div class="clock__canvas" id="clockMount" aria-hidden="true"></div>
+          <div class="clock__readout">
+            <time class="clock__time" id="clockTime" datetime="">--:--:--</time>
+            <span class="clock__date" id="clockDate">&nbsp;</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Temporizador -->
+      <section class="view" id="view-temporizador" hidden aria-labelledby="timer-title">
+        <p class="view__eyebrow" id="timer-title">Temporizador</p>
+        <div class="timer">
+          <div class="timer__inputs" id="timerInputs">
+            <label class="field">
+              <span class="field__label">Horas</span>
+              <input class="field__input" id="timerH" type="number" min="0" max="23" value="0" inputmode="numeric" />
+            </label>
+            <span class="timer__colon" aria-hidden="true">:</span>
+            <label class="field">
+              <span class="field__label">Minutos</span>
+              <input class="field__input" id="timerM" type="number" min="0" max="59" value="5" inputmode="numeric" />
+            </label>
+            <span class="timer__colon" aria-hidden="true">:</span>
+            <label class="field">
+              <span class="field__label">Segundos</span>
+              <input class="field__input" id="timerS" type="number" min="0" max="59" value="0" inputmode="numeric" />
+            </label>
+          </div>
+
+          <div class="timer__dial" id="timerDial" role="timer" aria-label="Tiempo restante">
+            <svg class="timer__ring" viewBox="0 0 200 200" aria-hidden="true">
+              <circle class="timer__ring-track" cx="100" cy="100" r="92" />
+              <circle class="timer__ring-fill" id="timerRing" cx="100" cy="100" r="92" />
+            </svg>
+            <time class="timer__time" id="timerDisplay" datetime="PT5M">05:00</time>
+          </div>
+
+          <div class="timer__presets" id="timerPresets" role="group" aria-label="Duración rápida">
+            <button type="button" class="chip" data-seconds="60">1 min</button>
+            <button type="button" class="chip" data-seconds="300">5 min</button>
+            <button type="button" class="chip" data-seconds="600">10 min</button>
+            <button type="button" class="chip" data-seconds="900">15 min</button>
+            <button type="button" class="chip" data-seconds="1800">30 min</button>
+            <button type="button" class="chip" data-seconds="3600">1 h</button>
+          </div>
+
+          <div class="controls">
+            <button type="button" class="btn btn--primary" id="timerStart">Iniciar</button>
+            <button type="button" class="btn" id="timerReset" disabled>Reiniciar</button>
+          </div>
+          <p class="status" id="timerStatus" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <!-- Cronómetro -->
+      <section class="view" id="view-cronometro" hidden aria-labelledby="stopwatch-title">
+        <p class="view__eyebrow" id="stopwatch-title">Cronómetro</p>
+        <div class="stopwatch">
+          <time class="stopwatch__time" id="stopwatchDisplay">00:00.00</time>
+          <div class="controls">
+            <button type="button" class="btn btn--primary" id="stopwatchStart">Iniciar</button>
+            <button type="button" class="btn" id="stopwatchLap" disabled>Vuelta</button>
+            <button type="button" class="btn" id="stopwatchReset" disabled>Reiniciar</button>
+          </div>
+          <ol class="stopwatch__laps" id="stopwatchLaps"></ol>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
