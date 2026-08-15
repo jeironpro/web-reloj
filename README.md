@@ -24,16 +24,16 @@ Este proyecto forma parte de mi portafolio personal. El objetivo es demostrar bu
 
 ```bash
 # Instalar dependencias
-npm install
+yarn install
 
 # Desarrollo
-npm run dev
+yarn dev
 
 # Typecheck + build de producción
-npm run build
+yarn build
 
 # Previsualizar el build
-npm run preview
+yarn preview
 ```
 
 ## 📁 Estructura
@@ -50,7 +50,7 @@ npm run preview
 │       ├── clockView.ts      # Reloj analógico en Three.js
 │       ├── timerView.ts      # Temporizador
 │       └── stopwatchView.ts  # Cronómetro
-└── .github/workflows/ci.yml  # CI (npm ci + npm run build)
+└── .github/workflows/ci.yml  # CI (yarn install + yarn build)
 ```
 
 ## 📜 Licencia
