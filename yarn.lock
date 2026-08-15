@@ -463,6 +463,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier@npm:^3.9.6":
+  version: 3.9.6
+  resolution: "prettier@npm:3.9.6"
+  bin:
+    prettier: bin/prettier.cjs
+  checksum: 10c0/9f7ddae234035868f3daab3dc34e6de7e54622185afb017378029f0c09a9c023248ccf6f34def0b17a0538e18c47aa1b3188bab72965d1bf735919baa0747e99
+  languageName: node
+  linkType: hard
+
 "proc-log@npm:^7.0.0":
   version: 7.0.0
   resolution: "proc-log@npm:7.0.0"
@@ -660,6 +669,7 @@ __metadata:
   resolution: "web-reloj@workspace:."
   dependencies:
     "@types/three": "npm:^0.185.4"
+    prettier: "npm:^3.9.6"
     three: "npm:^0.185.1"
     typescript: "npm:^5.9.0"
     vite: "npm:^8.2.1"
