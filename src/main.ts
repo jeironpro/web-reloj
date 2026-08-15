@@ -5,12 +5,6 @@ import { initTimer } from "./views/timerView";
 import { initStopwatch } from "./views/stopwatchView";
 import { VIEW_IDS, type ViewId } from "./types";
 
-const TITLES: Record<ViewId, string> = {
-  reloj: "Reloj",
-  temporizador: "Temporizador",
-  cronometro: "Cronómetro",
-};
-
 const views: Record<ViewId, HTMLElement> = {
   reloj: document.getElementById("view-reloj") as HTMLElement,
   temporizador: document.getElementById("view-temporizador") as HTMLElement,
@@ -50,8 +44,6 @@ function showView(id: ViewId): void {
       link.removeAttribute("aria-current");
     }
   });
-
-  document.title = `Reloj · ${TITLES[id]}`;
 }
 
 initNav();
