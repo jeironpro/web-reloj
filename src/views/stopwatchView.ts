@@ -1,27 +1,8 @@
-export interface StopwatchController {
-    setVisible(visible: boolean): void;
-}
+import { byId } from "../utils/dom";
+import { formatSplit, pad2 } from "../utils/format";
+import type { ViewController } from "../types";
 
-function byId<T extends Element>(id: string): T {
-    const el = document.getElementById(id);
-    if (!el) throw new Error(`Elemento #${id} no encontrado`);
-    return el as unknown as T;
-}
-
-function pad2(n: number): string {
-    return n.toString().padStart(2, "0");
-}
-
-// MM:SS.cc (los minutos pueden superar 59)
-function formatSplit(ms: number): string {
-    const totalCs = Math.floor(ms / 10);
-    const minutes = Math.floor(totalCs / 6000);
-    const seconds = Math.floor((totalCs % 6000) / 100);
-    const centis = totalCs % 100;
-    return `${pad2(minutes)}:${pad2(seconds)}.${pad2(centis)}`;
-}
-
-export function initStopwatch(): StopwatchController {
+export function initStopwatch(): ViewController {
     const display = byId<HTMLElement>("stopwatchDisplay");
     const startBtn = byId<HTMLButtonElement>("stopwatchStart");
     const lapBtn = byId<HTMLButtonElement>("stopwatchLap");

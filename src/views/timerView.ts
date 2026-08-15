@@ -1,34 +1,10 @@
-export interface TimerController {
-    setVisible(visible: boolean): void;
-}
+import { byId } from "../utils/dom";
+import { clampInt, formatTimer } from "../utils/format";
+import type { ViewController } from "../types";
 
 const CIRCUMFERENCE = 2 * Math.PI * 92;
 
-function byId<T extends Element>(id: string): T {
-    const el = document.getElementById(id);
-    if (!el) throw new Error(`Elemento #${id} no encontrado`);
-    return el as unknown as T;
-}
-
-function clampInt(raw: string, min: number, max: number): number {
-    const n = Math.trunc(Number(raw));
-    if (Number.isNaN(n)) return min;
-    return Math.min(max, Math.max(min, n));
-}
-
-function pad2(n: number): string {
-    return n.toString().padStart(2, "0");
-}
-
-function formatTimer(ms: number): string {
-    const totalSeconds = Math.max(0, Math.round(ms / 1000));
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
-    return h > 0 ? `${h}:${pad2(m)}:${pad2(s)}` : `${pad2(m)}:${pad2(s)}`;
-}
-
-export function initTimer(): TimerController {
+export function initTimer(): ViewController {
     const hInput = byId<HTMLInputElement>("timerH");
     const mInput = byId<HTMLInputElement>("timerM");
     const sInput = byId<HTMLInputElement>("timerS");

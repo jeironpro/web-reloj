@@ -1,5 +1,7 @@
 import * as THREE from "three";
 
+import { pad2 } from "../utils/format";
+
 export interface ClockController {
     start(): void;
     stop(): void;
@@ -11,10 +13,6 @@ const TAU = Math.PI * 2;
 const BRASS = 0xc19a52;
 const BRASS_DARK = 0x8a6a2f;
 const INK = 0x2a241c;
-
-function pad(n: number): string {
-    return n.toString().padStart(2, "0");
-}
 
 function makeDialTexture(): THREE.CanvasTexture {
     const canvas = document.createElement("canvas");
@@ -260,7 +258,7 @@ export function initClock(mount: HTMLElement): ClockController {
             group.rotation.y = curY;
         }
 
-        const text = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+        const text = `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`;
         if (text !== lastTime) {
             lastTime = text;
             timeEl.textContent = text;
