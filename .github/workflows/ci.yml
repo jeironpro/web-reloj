@@ -1,6 +1,8 @@
 # Workflow de integración continua.
-# En cada PR (y push a main) instala dependencias con Yarn y compila el proyecto
-# (typecheck + build de producción) para validar que todo sigue verde.
+# En cada PR (y push a main) valida, en orden:
+#   1. Lint (ESLint): calidad, imports y tipos.
+#   2. Formato (Prettier): indentación de 4 espacios y demás convenciones.
+#   3. Build: typecheck + build de producción.
 name: CI
 
 on:
@@ -19,4 +21,9 @@ jobs:
             - name: Habilitar Yarn (Corepack)
               run: corepack enable
             - run: yarn install --immutable
-            - run: yarn build
+            - name: Lint (ESLint)
+              run: yarn lint
+            - name: Formato (Prettier)
+              run: yarn format:check
+            - name: Build
+              run: yarn build
